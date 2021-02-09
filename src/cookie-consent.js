@@ -71,7 +71,7 @@ var CookieConsent = /** @class */ (function () {
             "<button class='btn-accept-all " + this.props.buttonPrimaryClass + "'>" + _t.buttonAcceptAll + "</button>" +
             "</div>");
     }
-    CookieConsent.prototype.setCookie = function (name, value, days) {
+    CookieConsent.setCookie = function (name, value, days) {
         var expires = "";
         if (days) {
             var date = new Date();
@@ -80,7 +80,7 @@ var CookieConsent = /** @class */ (function () {
         }
         document.cookie = name + "=" + (value || "") + expires + "; Path=/; SameSite=Strict;";
     };
-    CookieConsent.prototype.getCookie = function (name) {
+    CookieConsent.getCookie = function (name) {
         var nameEQ = name + "=";
         var ca = document.cookie.split(';');
         for (var i = 0; i < ca.length; i++) {
@@ -94,10 +94,10 @@ var CookieConsent = /** @class */ (function () {
         }
         return undefined;
     };
-    CookieConsent.prototype.removeCookie = function (name) {
+    CookieConsent.removeCookie = function (name) {
         document.cookie = name + '=; Path=/; SameSite=Strict; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     };
-    CookieConsent.prototype.documentReady = function (fn) {
+    CookieConsent.documentReady = function (fn) {
         if (document.readyState !== 'loading') {
             fn();
         }
@@ -109,45 +109,46 @@ var CookieConsent = /** @class */ (function () {
         this.modal.style.display = "none";
     };
     CookieConsent.prototype.showDialog = function () {
-        this.documentReady(function () {
-            this.modal = document.getElementById(this.props.modalId);
-            if (!this.modal) {
-                this.modal = document.createElement("div");
-                this.modal.id = this.props.modalId;
-                this.modal.innerHTML = this.modalContent;
-                document.body.append(this.modal);
-                this.modal.querySelector(".btn-accept-necessary").addEventListener("click", function () {
-                    this.setCookie(this.props.cookieName, "false", 365);
-                    this.hideDialog();
-                    if (this.props.postSelectionCallback) {
-                        this.props.postSelectionCallback();
+        var _this = this;
+        CookieConsent.documentReady(function () {
+            _this.modal = document.getElementById(_this.props.modalId);
+            if (!_this.modal) {
+                _this.modal = document.createElement("div");
+                _this.modal.id = _this.props.modalId;
+                _this.modal.innerHTML = _this.modalContent;
+                document.body.append(_this.modal);
+                _this.modal.querySelector(".btn-accept-necessary").addEventListener("click", function () {
+                    CookieConsent.setCookie(_this.props.cookieName, "false", 365);
+                    _this.hideDialog();
+                    if (_this.props.postSelectionCallback) {
+                        _this.props.postSelectionCallback();
                     }
                 });
-                this.modal.querySelector(".btn-accept-all").addEventListener("click", function () {
-                    this.setCookie(this.props.cookieName, "true", 365);
-                    this.hideDialog();
-                    if (this.props.postSelectionCallback) {
-                        this.props.postSelectionCallback();
+                _this.modal.querySelector(".btn-accept-all").addEventListener("click", function () {
+                    CookieConsent.setCookie(_this.props.cookieName, "true", 365);
+                    _this.hideDialog();
+                    if (_this.props.postSelectionCallback) {
+                        _this.props.postSelectionCallback();
                     }
                 });
             }
             else {
-                this.modal.style.display = "block";
+                _this.modal.style.display = "block";
             }
-        }.bind(this));
+        });
     };
     // API
     CookieConsent.prototype.init = function () {
-        if (this.getCookie(this.props.cookieName) === undefined && this.props.autoShowModal) {
+        if (CookieConsent.getCookie(this.props.cookieName) === undefined && this.props.autoShowModal) {
             this.showDialog();
         }
     };
     CookieConsent.prototype.reset = function () {
-        this.removeCookie(this.props.cookieName);
+        CookieConsent.removeCookie(this.props.cookieName);
         this.showDialog();
     };
     CookieConsent.prototype.trackingAllowed = function () {
-        return this.getCookie(this.props.cookieName) === "true";
+        return CookieConsent.getCookie(this.props.cookieName) === "true";
     };
     return CookieConsent;
 }());

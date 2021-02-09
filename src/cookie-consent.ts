@@ -40,7 +40,7 @@ export class CookieConsent {
     }
     private lang: string
     private modalContent: string
-    modal: any
+    private modal: any
 
     constructor(props) {
         for (var property in props) {
@@ -79,7 +79,7 @@ export class CookieConsent {
         )
     }
 
-    private setCookie(name, value, days) {
+    private static setCookie(name, value, days) {
         var expires = ""
         if (days) {
             var date = new Date()
@@ -89,7 +89,7 @@ export class CookieConsent {
         document.cookie = name + "=" + (value || "") + expires + "; Path=/; SameSite=Strict;"
     }
 
-    private getCookie(name) {
+    private static getCookie(name) {
         var nameEQ = name + "="
         var ca = document.cookie.split(';')
         for (var i = 0; i < ca.length; i++) {
@@ -104,11 +104,11 @@ export class CookieConsent {
         return undefined
     }
 
-    private removeCookie(name) {
+    private static removeCookie(name) {
         document.cookie = name + '=; Path=/; SameSite=Strict; Expires=Thu, 01 Jan 1970 00:00:01 GMT;'
     }
 
-    private documentReady(fn) {
+    private static documentReady(fn) {
         if (document.readyState !== 'loading') {
             fn()
         } else {
@@ -121,22 +121,22 @@ export class CookieConsent {
     }
 
     private showDialog() {
-        this.documentReady(function () {
+        CookieConsent.documentReady(() => {
             this.modal = document.getElementById(this.props.modalId)
             if (!this.modal) {
                 this.modal = document.createElement("div")
                 this.modal.id = this.props.modalId
                 this.modal.innerHTML = this.modalContent
                 document.body.append(this.modal)
-                this.modal.querySelector(".btn-accept-necessary").addEventListener("click", function () {
-                    this.setCookie(this.props.cookieName, "false", 365)
+                this.modal.querySelector(".btn-accept-necessary").addEventListener("click", () => {
+                    CookieConsent.setCookie(this.props.cookieName, "false", 365)
                     this.hideDialog()
                     if (this.props.postSelectionCallback) {
                         this.props.postSelectionCallback()
                     }
                 })
-                this.modal.querySelector(".btn-accept-all").addEventListener("click", function () {
-                    this.setCookie(this.props.cookieName, "true", 365)
+                this.modal.querySelector(".btn-accept-all").addEventListener("click", () => {
+                    CookieConsent.setCookie(this.props.cookieName, "true", 365)
                     this.hideDialog()
                     if (this.props.postSelectionCallback) {
                         this.props.postSelectionCallback()
@@ -145,23 +145,23 @@ export class CookieConsent {
             } else {
                 this.modal.style.display = "block"
             }
-        }.bind(this))
+        });
     }
 
     // API
     public init() {
-        if (this.getCookie(this.props.cookieName) === undefined && this.props.autoShowModal) {
+        if (CookieConsent.getCookie(this.props.cookieName) === undefined && this.props.autoShowModal) {
             this.showDialog()
         }
     }
 
     public reset() {
-        this.removeCookie(this.props.cookieName)
+        CookieConsent.removeCookie(this.props.cookieName)
         this.showDialog()
     }
 
     public trackingAllowed() {
-        return this.getCookie(this.props.cookieName) === "true"
+        return CookieConsent.getCookie(this.props.cookieName) === "true"
     }
 
 }
