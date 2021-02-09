@@ -25,7 +25,7 @@
     "url": "https://github.com/shaack/cookie-consent-js/issues"
   },
   "homepage": "https://github.com/shaack/cookie-consent-js#readme",
-  "dependencies": {
+  "devDependencies": {
     "typescript": "^4.1.3"
   }
 }
