@@ -4,7 +4,8 @@
   "description": "A simple dialog and framework to handle the German and EU law (may 2020) about cookies in a website",
   "main": "src/cookie-consent.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc ./src/cookie-consent.ts"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/shaack/cookie-consent-js/issues"
   },
-  "homepage": "https://github.com/shaack/cookie-consent-js#readme"
+  "homepage": "https://github.com/shaack/cookie-consent-js#readme",
+  "dependencies": {
+    "typescript": "^4.1.3"
+  }
 }
