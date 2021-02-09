@@ -4,7 +4,7 @@
  * License: MIT, see file 'LICENSE'
  */
 
-function CookieConsent(props) {
+export function CookieConsent(props) {
 
     var self = this
     this.props = {
